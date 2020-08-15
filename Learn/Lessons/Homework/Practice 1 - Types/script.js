@@ -25,7 +25,7 @@
 
 // 1 задание
 
-let numberOfFilms = +prompt("Сколько фильмов вы уже посмотрели?","10"),
+const numberOfFilms = +prompt("Сколько фильмов вы уже посмотрели?","10"),
     personalMovieDB = {
         count : numberOfFilms,
         movies : {},
