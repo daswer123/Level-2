@@ -15,3 +15,53 @@
 'use strict';
 
 // Код возьмите из предыдущего домашнего задания
+
+const numberOfFilms = +prompt("Сколько фильмов вы уже посмотрели?","10"),
+    personalMovieDB = {
+        count : numberOfFilms,
+        movies : {},
+        actors : {},
+        genres : [],
+        privat : false
+    };
+
+// 2 step
+
+// 1 вариант
+for (let i = 1; i <= 2; i++){
+
+    const film = prompt("Один из просмотрелных фильмов","Титаник"),
+    rate = prompt("Какой вы поставили рейтинг?","22");
+
+    if (  (film.length <= 50 && film.length != 0) && (film != false && rate != false) ){
+
+        personalMovieDB.movies[film] = rate;
+
+    } else{
+
+        console.log("Ошибка");
+        alert("Прозошла ошибка, введите название фильма ещё раз");
+
+        i--;
+        continue;
+    }
+
+    console.log(i);
+
+}
+
+if (numberOfFilms <= 10){
+    console.log( "Вы начинающий кинолюбитель" );
+} else if ( numberOfFilms <= 30){
+    console.log( "Вы кинолюбитель" );
+} else {
+    console.log( "Вы бог в кино" );
+}
+
+console.log(personalMovieDB);
+
+
+
+
+
+
