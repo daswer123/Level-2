@@ -72,3 +72,14 @@ movieDB.movies.forEach ((elem,i) =>{
 //   elem.remove();
 // });
 
+// movieDB.movies.sort();
+// for (let i = 0; i < movieDB.movies.length; i++){
+
+//     let elem = document.createElement("li");
+//     elem.classList.add("promo__interactive-item");
+//     elem.innerText = `${i+1} -- ${movieDB.movies[i]}`;
+//     list.append(elem);
+//     console.log(i);
+// }
+
+
