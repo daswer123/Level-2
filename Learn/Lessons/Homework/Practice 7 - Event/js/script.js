@@ -80,6 +80,10 @@ let   bins = list.querySelectorAll(".delete");
 addFilm.addEventListener("click",(event) =>{
     event.preventDefault();
 
+    if (addForm.querySelector("input[type = 'checkbox'").value == "on"){
+        console.log("Вы добавили любимый");
+    }
+
     if (addInput.value == ""){
         alert("Пожалуйста введите фильм");
     } 
@@ -171,5 +175,3 @@ console.log(elems);
 //     list.append(elem);
 //     console.log(i);
 // }
-
-
