@@ -1,5 +1,7 @@
 
-const tabs = document.querySelectorAll(".tabcontent"),
+// Tabs
+"use strict";
+let tabs = document.querySelectorAll(".tabcontent"),
       tabToggle = document.querySelector(".tabheader__items");
 
 
