@@ -4,6 +4,17 @@
     padding: 0;
     font-family: Roboto, sans-serif;
 }
+
+@keyframes unfade {
+   0% {opacity: 0.1;}
+   30% {opacity: 0.3;}
+   40% {opacity: 0.4;}
+   50% {opacity: 0.6;}
+   60% {opacity: 0.7;}
+   80% {opacity: 0.9;}
+   100% {opacity: 1;}
+}
+
 a {
     text-decoration: none;
 }
@@ -158,6 +169,8 @@ a {
 
 .tabcontent-active{
     display: block;
+    animation-name : unfade;
+    animation-duration: 0.5s;
 }
 
 .tabcontent img {

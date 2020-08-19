@@ -10,15 +10,16 @@ tabToggle.addEventListener("click",(event) => {
         let tab = event.target;
         let tabIndex = 0;
         tabToggle.querySelectorAll(".tabheader__item").forEach((elem,i) =>{
-        if(elem.classList.contains("tabheader__item_active")){
+
+          if(elem.classList.contains("tabheader__item_active")){
              elem.classList.remove("tabheader__item_active");
         }
 
-        if(elem == tab){
+          if(elem == tab){
             tabIndex = i;
         }
 
-        });
+          });
 
         tab.classList.add("tabheader__item_active");
 
