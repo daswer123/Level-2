@@ -125,6 +125,8 @@ modalBtn.forEach(elem =>{
     elem.addEventListener("click",() =>{
         modal.style.display = "block";
         document.body.style.overflow = "hidden";
+
+        localStorage.setItem("modal","true");
     });
 });
 
@@ -139,4 +141,25 @@ modal.addEventListener("click",()=>{
         document.body.style.overflow = "visible";
     }
 });
+
+if (localStorage.getItem("modal") != "true"){
+    let TempModal = setTimeout(()=>{
+        modal.style.display = "block";
+        document.body.style.overflow = "hidden";
+        localStorage.setItem("modal","true");
+    },3000);
+} else{
+    console.log("Окон больше не будет!");
+}
+
+document.addEventListener("scroll",()=>{
+    let scroll = document.documentElement.scrollTop;
+
+    if (scroll > 2800 && localStorage.getItem("modal") == null){
+        modal.style.display = "block";
+        document.body.style.overflow = "hidden";
+        localStorage.setItem("modal","true");
+    }
+});
+
 
