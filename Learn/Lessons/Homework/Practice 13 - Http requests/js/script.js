@@ -216,3 +216,45 @@ const post = new menuItem("img/tabs/post.jpg","Постное",
                     230,".menu__field .container");
 
 renderMenu(fitnes,premium,post);
+
+// REsponse on forms
+
+const forms = document.querySelectorAll("form");
+
+function sendRequest(form){
+
+    
+    let message = document.createElement("p");
+    form.append(message);
+
+    form.addEventListener("submit",(event)=>{
+        event.preventDefault();
+        let request = new XMLHttpRequest();
+        message.innerText = "Загрузка на сервер";
+
+        request.open("POST","server.php");
+        // request.setRequestHeader("content-type","multipart/form-data");
+        const formData = new FormData(form);
+        request.send(formData);
+
+        request.addEventListener("load",()=>{
+            if (request.status == 200 && request.readyState == 4){
+                message.innerText = "Форма отправленна и успешно получена";
+            } else {
+                message.innerText = "Произошла ошибка";
+            }
+
+            form.reset();
+            setTimeout(()=>{
+                message.innerText = "";
+            },3000);
+        });
+        
+    });
+    
+
+}
+
+forms.forEach(form =>{
+    sendRequest(form);
+});
