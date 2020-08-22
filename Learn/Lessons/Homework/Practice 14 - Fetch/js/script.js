@@ -230,28 +230,61 @@ function sendRequest(form){
 
     form.addEventListener("submit",(event)=>{
         event.preventDefault();
-        let request = new XMLHttpRequest();
-        message.classList.add("loading-spin");
+
+        //Современный метод через Fetch api
+
+        const formData = new FormData(form);
         form.after(message);
 
-        request.open("POST","server.php");
-        // request.setRequestHeader("content-type","multipart/form-data");
-        const formData = new FormData(form);
-        request.send(formData);
-
-        request.addEventListener("load",()=>{
-            message.classList.remove("loading-spin");
-            if (request.status == 200 && request.readyState == 4){
-                message.innerText = "Форма отправленна и успешно получена";
-            } else {
-                message.innerText = "Произошла ошибка";
-            }
-
-            form.reset();
-            setTimeout(()=>{
-                message.innerText = "";
-            },3000);
+        let obj = {};
+        formData.forEach((elem,key)=>{
+            obj[key] = elem;
         });
+
+        fetch("server.php",{
+            method: "POST",
+            body : JSON.stringify(obj),
+            headers : {
+                "Content-type" : "applicaton/json"
+            }})
+            .then((response) => response.text())
+            .then(response => {
+                console.log(response);
+                message.classList.remove("loading-spin");
+                message.innerText = "Форма отправленна и успешно получена";
+            }).catch(() =>{
+                message.innerText = "Произошла ошибка";
+            }).finally(() =>{
+                form.reset();
+                setTimeout(()=>{
+                    message.innerText = "";
+                },3000);
+
+            });
+
+        // Старый метод через XMLHttpRequest
+        // let request = new XMLHttpRequest();
+        // message.classList.add("loading-spin");
+        // 
+
+        // request.open("POST","server.php");
+        // // request.setRequestHeader("content-type","multipart/form-data");
+        // const formData = new FormData(form);
+        // request.send(formData);
+
+        // request.addEventListener("load",()=>{
+        //     message.classList.remove("loading-spin");
+        //     if (request.status == 200 && request.readyState == 4){
+        //         message.innerText = "Форма отправленна и успешно получена";
+        //     } else {
+        //         message.innerText = "Произошла ошибка";
+        //     }
+
+        //     form.reset();
+        //     setTimeout(()=>{
+        //         message.innerText = "";
+        //     },3000);
+        // });
         
     });
     
