@@ -116,6 +116,19 @@ setClock(deadline);
 //Modal Window
 
 
+function closeModal() {
+    modal.classList.add('hide');
+    modal.classList.remove('show');
+    document.body.style.overflow = '';
+}
+
+function openModal() {
+    modal.classList.add('show');
+    modal.classList.remove('hide');
+    document.body.style.overflow = 'hidden';
+}
+
+
 const modalBtn = document.querySelectorAll("[data-modal]"),
       modal    = document.querySelector(".modal"),
       modalClose = document.querySelector("[data-close]");
@@ -223,7 +236,6 @@ getContent(" http://localhost:3000/menu").then(data => {
     data.forEach(elem =>{
         let  menu = new menuItem(elem.imgSrc,elem.title,elem.desk,elem.price,elem.parent = ".menu__field .container");
         menu.createItem();
-        console.log(elem);
     });
 });
 
@@ -246,7 +258,7 @@ getContent(" http://localhost:3000/menu").then(data => {
 
 const forms = document.querySelectorAll('form');
 const message = {
-    loading: 'img/form/spinner.svg',
+    loading: 'img/spinner.svg',
     success: 'Спасибо! Скоро мы с вами свяжемся',
     failure: 'Что-то пошло не так...'
 };
@@ -296,7 +308,6 @@ function bindPostData(form) {
 
         postData('http://localhost:3000/requests', json)
         .then(data => {
-            console.log(data);
             showThanksModal(message.success);
             statusMessage.remove();
         }).catch(() => {
@@ -330,85 +341,281 @@ function showThanksModal(message) {
     }, 4000);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function closeModal() {
-    modal.classList.add('hide');
-    modal.classList.remove('show');
-    document.body.style.overflow = '';
+function getZero(num){
+    if (+num >= 10){
+        return ""+num;
+    } else{
+        return "0"+num;
+    }
 }
 
-function openModal() {
-    modal.classList.add('show');
-    modal.classList.remove('hide');
-    document.body.style.overflow = 'hidden';
+
+//Slider
+
+let slides = document.querySelectorAll(".offer__slide"),
+    currentText = document.querySelector("#current"),
+    totalText = document.querySelector("#total"),
+    total = slides.length,
+    width = getComputedStyle(slides[0]).width,
+    slideIndex = 1;
+
+totalText.textContent = getZero(total);
+    
+const nextSlideButton = document.querySelector(".offer__slider-next"),
+      prevSlideButton = document.querySelector(".offer__slider-prev"),
+      sliderWrapper =   document.querySelector(".offer__slider-wrapper"),
+      sliderInner   =   document.querySelector(".offer__slider-inner");
+
+const indicatos = document.createElement("ul");
+indicatos.classList.add("container");
+
+
+sliderWrapper.style.overflow = "hidden";
+sliderInner.style.transition = "0.5s";
+sliderInner.style.width = 100 * slides.length + "%";
+
+slides.forEach(slide =>{
+  slide.style.width = width;
+
+  document.querySelector(".offer__slider").append(indicatos);
+  let dot = document.createElement("li");
+  dot.classList.add("dot");
+  indicatos.append(dot);
+
+});
+
+
+
+const dots = document.querySelectorAll(".dot");
+
+currentText.textContent = getZero(slideIndex);
+
+function changeSlide(index){
+    sliderInner.style.transform = `translateX(${index*-(+width.match(/\d/g).join(""))}px)`;
 }
+
+function checkTap(){
+    dots.forEach((dot,index) =>{
+        if (slideIndex-1 == index){
+            dot.style.opacity = "1";
+        } else{
+            dot.style.opacity = "0.2";
+        }
+    });
+}
+
+function setTap(){
+    dots.forEach((dot,index) =>{
+        dot.addEventListener("click",()=>{
+            slideIndex = index+1;
+            showSlide(0);
+        });
+    });
+}
+
+
+
+function showSlide(n = 1){
+
+    slideIndex = slideIndex + n;
+
+    if (slideIndex > total){
+        changeSlide(0);
+        slideIndex = 1;
+        currentText.textContent = getZero(+slideIndex);
+    }
+
+    if (slideIndex < 1){
+        changeSlide(total-1);
+        slideIndex = total;
+        currentText.textContent = getZero(+slideIndex);
+    }
+
+    changeSlide(slideIndex-1);
+    currentText.textContent = getZero(+slideIndex);
+    checkTap();
+
+}
+
+nextSlideButton.addEventListener("click",()=>{
+    showSlide(1);
+});
+prevSlideButton.addEventListener("click",()=>{
+    showSlide(-1);
+});
+
+checkTap();
+setTap();
+const slideInterval = setInterval(showSlide,5000);
+
+//Calc
+
+
+const calcResult = document.querySelector(".calculating__result span"),
+      calcForm = document.querySelector(".calculating__field"),
+      calcStatic = document.querySelectorAll(".calculating__choose");
+
+
+let sex = "female",
+           height,
+           weight,
+           age,
+    ratio = "1.375";
+
+
+
+function calculating() {
+    if (!sex || !height || !weight || !age || !ratio){
+        calcResult.textContent = "....";
+        return;
+    }
+
+    let result = 0;
+    if (sex == "male"){
+        result = 88.3 + (13.4 * weight) + (4.8*height) + (5.7*age) ;
+    } else {
+        result = 447.6 + (9.2 * weight) + (3.1*height) + (4.3*age) ;
+        
+    }
+    calcResult.textContent = Math.round(result * ratio);
+}
+
+function getStaticInfo(parent){
+    const elements = document.querySelectorAll(`${parent} div`);
+
+    document.querySelector(parent).addEventListener("click",(e) =>{
+        let target = e.target;
+        if (target.getAttribute("data-ratio")){
+            ratio = target.getAttribute("data-ratio");
+            localStorage.setItem("ratio",ratio);
+        } else{
+            sex = target.getAttribute("id");
+            localStorage.setItem("sex",sex);
+        }
+        calculating();
+
+        elements.forEach( (elem) =>{
+            if (target == elem){
+                elem.classList.add("calculating__choose-item_active");
+            } else{
+                elem.classList.remove("calculating__choose-item_active");
+            }
+        });
+    });
+
+}
+
+function getDynamicInfo(selector){
+   const input = document.querySelector(selector);
+   const reg  = /\D/gi;
+
+   input.addEventListener("input",() =>{
+
+      if (input.getAttribute("id") == "weight"){
+          weight = input.value;
+          weight = weight.replace(reg,"");
+          input.value = weight ;
+          localStorage.setItem("weight", weight);
+      }
+
+      if (input.getAttribute("id") == "height"){
+        height = input.value;
+        height = height.replace(reg,"");
+        input.value = height ;
+        localStorage.setItem("height", height);
+
+      }
+      if (input.getAttribute("id") == "age"){
+          age = input.value;
+          age = age.replace(reg,"");
+          input.value = age ;
+          localStorage.setItem("age", age);
+      }
+
+      calculating();
+   });
+}
+
+if(localStorage.getItem("sex")){
+    sex = localStorage.getItem("sex");
+}
+if(localStorage.getItem("weight")){
+    weight = localStorage.getItem("weight");
+}
+if(localStorage.getItem("height")){
+    height = localStorage.getItem("height");
+}
+if(localStorage.getItem("age")){
+    age = localStorage.getItem("age");
+}
+if(localStorage.getItem("ratio")){
+    ratio = localStorage.getItem("ratio");
+}
+
+
+getStaticInfo(".calculating__choose_sex");
+getStaticInfo(".calculating__choose_big");
+getDynamicInfo("#height");
+getDynamicInfo("#weight");
+getDynamicInfo("#age");
+
+
+calculating();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -223,7 +223,6 @@ getContent(" http://localhost:3000/menu").then(data => {
     data.forEach(elem =>{
         let  menu = new menuItem(elem.imgSrc,elem.title,elem.desk,elem.price,elem.parent = ".menu__field .container");
         menu.createItem();
-        console.log(elem);
     });
 });
 
@@ -246,7 +245,7 @@ getContent(" http://localhost:3000/menu").then(data => {
 
 const forms = document.querySelectorAll('form');
 const message = {
-    loading: 'img/form/spinner.svg',
+    loading: 'img/spinner.svg',
     success: 'Спасибо! Скоро мы с вами свяжемся',
     failure: 'Что-то пошло не так...'
 };
@@ -296,7 +295,6 @@ function bindPostData(form) {
 
         postData('http://localhost:3000/requests', json)
         .then(data => {
-            console.log(data);
             showThanksModal(message.success);
             statusMessage.remove();
         }).catch(() => {
@@ -330,13 +328,63 @@ function showThanksModal(message) {
     }, 4000);
 }
 
+//Slider
+
+let slides = document.querySelectorAll(".offer__slide"),
+    currentText = document.querySelector("#current"),
+    totalText = document.querySelector("#total"),
+    total = slides.length;
+
+totalText.textContent = getZero(total);
+    
+const nextSlideButton = document.querySelector(".offer__slider-next"),
+      prevSlideButton = document.querySelector(".offer__slider-prev");
 
 
+function getZero(num){
+    if (+num >= 10){
+        return ""+num;
+    } else{
+        return "0"+num;
+    }
+}
 
+function showSlides(){
+    slides.forEach((slide, slideIndex) =>{
+        if (slideIndex == +currentText.textContent-1){
+            slide.classList.add("show");
+            slide.classList.remove("hide");
+            
+        } else{
+            slide.classList.add("hide");
+            slide.classList.remove("show");
+            
+        }
+    });
+}
 
+function nextSlide(){
 
+    currentText.textContent = getZero(+currentText.textContent+1);
+    if (+currentText.textContent  > total){
+        currentText.textContent = `0${1}`;
+    }
+    showSlides(slides,+currentText.textContent);
+}
 
+function prevSlide(){
+    
+    currentText.textContent = getZero(+currentText.textContent-1);
 
+    if (+currentText.textContent  < 1){
+        currentText.textContent = getZero(total);
+    }
+    showSlides(slides,+currentText.textContent);
+}
+showSlides(slides,+currentText.textContent);
+
+nextSlideButton.addEventListener("click",nextSlide);
+prevSlideButton.addEventListener("click",prevSlide);
 
 
 

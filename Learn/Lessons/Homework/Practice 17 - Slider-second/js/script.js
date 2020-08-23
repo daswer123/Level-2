@@ -223,7 +223,6 @@ getContent(" http://localhost:3000/menu").then(data => {
     data.forEach(elem =>{
         let  menu = new menuItem(elem.imgSrc,elem.title,elem.desk,elem.price,elem.parent = ".menu__field .container");
         menu.createItem();
-        console.log(elem);
     });
 });
 
@@ -246,7 +245,7 @@ getContent(" http://localhost:3000/menu").then(data => {
 
 const forms = document.querySelectorAll('form');
 const message = {
-    loading: 'img/form/spinner.svg',
+    loading: 'img/spinner.svg',
     success: 'Спасибо! Скоро мы с вами свяжемся',
     failure: 'Что-то пошло не так...'
 };
@@ -296,7 +295,6 @@ function bindPostData(form) {
 
         postData('http://localhost:3000/requests', json)
         .then(data => {
-            console.log(data);
             showThanksModal(message.success);
             statusMessage.remove();
         }).catch(() => {
@@ -330,13 +328,154 @@ function showThanksModal(message) {
     }, 4000);
 }
 
+function getZero(num){
+    if (+num >= 10){
+        return ""+num;
+    } else{
+        return "0"+num;
+    }
+}
+
+
+//Slider
+
+let slides = document.querySelectorAll(".offer__slide"),
+    currentText = document.querySelector("#current"),
+    totalText = document.querySelector("#total"),
+    total = slides.length,
+    width = getComputedStyle(slides[0]).width,
+    slideIndex = 1;
+
+totalText.textContent = getZero(total);
+    
+const nextSlideButton = document.querySelector(".offer__slider-next"),
+      prevSlideButton = document.querySelector(".offer__slider-prev"),
+      sliderWrapper =   document.querySelector(".offer__slider-wrapper"),
+      sliderInner   =   document.querySelector(".offer__slider-inner");
+
+const indicatos = document.createElement("ul");
+indicatos.classList.add("container");
+
+
+sliderWrapper.style.overflow = "hidden";
+sliderInner.style.transition = "0.5s";
+sliderInner.style.width = 100 * slides.length + "%";
+
+slides.forEach(slide =>{
+  slide.style.width = width;
+
+  document.querySelector(".offer__slider").append(indicatos);
+  let dot = document.createElement("li");
+  dot.classList.add("dot");
+  indicatos.append(dot);
+
+});
+
+
+
+const dots = document.querySelectorAll(".dot");
+
+currentText.textContent = getZero(slideIndex);
+
+function changeSlide(index){
+    sliderInner.style.transform = `translateX(${index*-(+width.match(/\d/g).join(""))}px)`;
+}
+
+function checkTap(){
+    dots.forEach((dot,index) =>{
+        if (slideIndex-1 == index){
+            dot.style.opacity = "1";
+        } else{
+            dot.style.opacity = "0.2";
+        }
+    });
+}
+
+function setTap(){
+    dots.forEach((dot,index) =>{
+        dot.addEventListener("click",()=>{
+            slideIndex = index+1;
+            showSlide(0);
+        });
+    });
+}
+
+
+
+function showSlide(n = 1){
+
+    slideIndex = slideIndex + n;
+
+    if (slideIndex > total){
+        changeSlide(0);
+        slideIndex = 1;
+        currentText.textContent = getZero(+slideIndex);
+    }
+
+    if (slideIndex < 1){
+        changeSlide(total-1);
+        slideIndex = total;
+        currentText.textContent = getZero(+slideIndex);
+    }
+
+    changeSlide(slideIndex-1);
+    currentText.textContent = getZero(+slideIndex);
+    checkTap();
+
+}
+
+nextSlideButton.addEventListener("click",()=>{
+    showSlide(1);
+});
+prevSlideButton.addEventListener("click",()=>{
+    showSlide(-1);
+});
+
+checkTap();
+setTap();
+const slideInterval = setInterval(showSlide,5000);
 
 
 
 
+// 1-й вариант слайдера
 
+// function showSlides(){
+//     slides.forEach((slide, slideIndex) =>{
+//         if (slideIndex == +currentText.textContent-1){
+//             slide.classList.add("show");
+//             slide.classList.remove("hide");
+            
+//         } else{
+//             slide.classList.add("hide");
+//             slide.classList.remove("show");
+            
+//         }
+//     });
+// }
 
+// function nextSlide(){
 
+//     
+//     if (+currentText.textContent  > total){
+//         currentText.textContent = `0${1}`;
+//     }
+//     showSlides(slides,+currentText.textContent);
+// }
+
+// function prevSlide(){
+    
+//     currentText.textContent = getZero(+currentText.textContent-1);
+
+//     if (+currentText.textContent  < 1){
+//         currentText.textContent = getZero(total);
+//     }
+//     showSlides(slides,+currentText.textContent);
+// }
+// showSlides(slides,+currentText.textContent);
+
+// nextSlideButton.addEventListener("click",nextSlide);
+// prevSlideButton.addEventListener("click",prevSlide);
 
 
 
