@@ -1,8 +1,13 @@
 // REsponse on forms
-import {openModal,closeModal} from "./modal";
-import {postData} from "../services";
+import {
+    openModal,
+    closeModal
+} from "./modal";
+import {
+    postData
+} from "../services";
 
-function forms(){
+function forms() {
     const forms = document.querySelectorAll('form');
     const message = {
         loading: 'img/spinner.svg',
@@ -38,21 +43,21 @@ function forms(){
                 margin: 0 auto;
             `;
             form.insertAdjacentElement('afterend', statusMessage);
-        
+
             const formData = new FormData(form);
 
             const json = JSON.stringify(Object.fromEntries(formData.entries()));
 
             postData('http://localhost:3000/requests', json)
-            .then(data => {
-                showThanksModal(message.success);
-                statusMessage.remove();
-                console.log(data);
-            }).catch(() => {
-                showThanksModal(message.failure);
-            }).finally(() => {
-                form.reset();
-            });
+                .then(data => {
+                    showThanksModal(message.success);
+                    statusMessage.remove();
+                    console.log(data);
+                }).catch(() => {
+                    showThanksModal(message.failure);
+                }).finally(() => {
+                    form.reset();
+                });
         });
     }
 
@@ -78,6 +83,6 @@ function forms(){
             closeModal(document.querySelector(".modal"));
         }, 4000);
     }
-    }
+}
 
 export default forms;

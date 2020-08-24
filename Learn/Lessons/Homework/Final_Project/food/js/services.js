@@ -10,16 +10,20 @@ const postData = async (url, data) => {
     return await res.json();
 };
 
-const getContent = async (url) =>{ 
+const getContent = async (url) => {
 
     let request = await fetch(url);
- 
-    if(request.ok == false){
+
+    if (request.ok == false) {
         throw new Error("Не получилось зафетчить " + request.status);
     }
- 
-    return await request.json();
- };
 
-export {postData};
-export {getContent};
+    return await request.json();
+};
+
+export {
+    postData
+};
+export {
+    getContent
+};
