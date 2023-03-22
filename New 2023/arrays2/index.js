@@ -18,9 +18,9 @@ const getUrlParts = url => {
     const [domain,...pathInside] = newArr;
 
     console.log(`
-    Протокол сайта: ${protocol}
-    Доменное имя: ${domain}
-    Путь внутри сайта: ${pathInside.join("/")}
+        Протокол: ${protocol}
+        Доменное имя: ${domain}
+        Путь внутри сайта: ${pathInside.join("/")}
     `);
     
 }
